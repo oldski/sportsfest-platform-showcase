@@ -18,3 +18,8 @@ tree alone. It is not runnable: imports of files that were not copied are left a
 - `packages/ui/src/components/data-table.tsx` — the composed DataTable that every list in the product is built on.
 - `packages/ui/src/components/chart.tsx` — the Recharts wrapper under every analytics card.
 - `apps/dashboard/components/organizations/slug/players/players-data-table.tsx` — a product table composed from DataTable: role filter and badge, row actions, CSV, Excel and PDF exports.
+
+## Data model and tenancy
+
+- `packages/database/src/schema.ts` — excerpt of the Drizzle schema: tenant core, event-year scope, and the SportsFest tables. The omitted definitions are listed in a comment at the top.
+- `packages/database/rls-policies.sql` — Supabase row-level security policies. They guard the Supabase API surface; the app's own queries are scoped in the data layer (see the note in the file).
