@@ -7,7 +7,7 @@ tree alone. It is not runnable: imports of files that were not copied are left a
 
 ## Monorepo and tooling
 
-- `turbo.json` — the Turborepo task graph for three apps and twelve packages; `globalEnv` lists every environment variable the build depends on (names only; several analytics entries are template leftovers that the product does not use).
+- `turbo.json` — the Turborepo task graph for three apps and twelve packages; `globalEnv` lists the declared environment variables (names only; several analytics entries are template leftovers that the product does not use).
 - `pnpm-workspace.yaml` — the workspace is three globs: apps, packages, tooling.
 - `tooling/typescript-config/` — shared TypeScript presets (`base`, `nextjs`, `react-library`) that every app and package extends.
 

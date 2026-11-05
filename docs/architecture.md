@@ -60,7 +60,7 @@ Solid arrows are workspace imports or the service a package wraps. Dashed arrows
 
 **dashboard** is the product. Organizers sign in to buy team slots and tents, see who signed up, and build team and event rosters. Hosts use the `/admin` area of the same app to manage event years, products, coupons, sponsorships, payments, and reports. It also hosts the one public write endpoint, the team-signup API route, which the marketing site posts to.
 
-**marketing** is the public site and the per-organization player signup page at `/on/<slug>`. It reads the organization's name and logo from the database for branding, but every write goes through the dashboard's API route, so the marketing app has no mutation code of its own.
+**marketing** is the public site and the per-organization player signup page at `/on/<slug>`. It fetches the organization's name and logo over a dashboard API route for branding, and every write goes through the dashboard's team-signup route, so the marketing app has no database access of its own.
 
 **public-api** exposes a small set of API-key-authenticated routes for integrations. It shares the database and api-keys packages with the dashboard and nothing else.
 

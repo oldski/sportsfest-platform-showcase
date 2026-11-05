@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    console.log('✅ Payment intent created:', paymentIntent.id, 'client_secret:', paymentIntent.client_secret);
+    console.log('✅ Payment intent created:', paymentIntent.id);
 
     // Update order with Stripe payment intent ID
     await db

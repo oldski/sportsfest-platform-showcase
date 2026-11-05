@@ -4,7 +4,7 @@ One platform replaced a patchwork of event software, WordPress plugins, and PDFs
 
 ![Organizer dashboard](docs/screenshots/organizer-dashboard.png)
 
-This repository is a case study with a curated set of real, scrubbed source files. The product itself is private and client-owned. See [About the code folder](#about-the-code-folder) for what is and is not here.
+This repository is a case study with a curated set of real, scrubbed source files. The product itself is private and client-owned. Screenshots were taken on a development environment against a fictional organization, Cedar Point Robotics, with invented players and organizers; the 2027 products and prices shown are the real public price list, and product photos are pixelated. See [About the code folder](#about-the-code-folder) for what is and is not here.
 
 - Live: [sportsfest.com](https://sportsfest.com) and the signup site at [join.sportsfest.com](https://join.sportsfest.com)
 - Built by Kris Olds at LAYBL Labs, August to December 2025, maintained since
@@ -31,7 +31,7 @@ Three kinds of people use it:
 | Event year management: each year's dates, pricing, and products in one place | Shop and checkout through Stripe, with order and invoice views | Branded signup page for each organization |
 | Products for team registration, tents, and equipment, with inventory | Deposit now, pay the balance later | Event interest ranking at signup |
 | Coupons for sponsors and discounted pricing | Card and ACH payments, so sponsors can settle large invoices by bank transfer | Playing or spectating role |
-| Sponsorship invoices with secure payment links | Recruitment tools hub with share-by-link, QR code, and email | Confirmation email to the player, notification to the organizer |
+| Sponsorship invoices with secure payment links | Recruitment tools hub with share-by-link, QR code, and email | Notification email to the organizer on each signup |
 | Payment and invoice management, pending through refunded | Player tables with filters and CSV, Excel, and PDF exports | |
 | Tent tracking with availability and purchase detail | Team roster builder driven by the interests players chose | |
 | Organization, user, and player management across every company | Event roster builder for each team across all five beach events | |
@@ -81,11 +81,11 @@ The full diagram, one paragraph per package, and the dashboard's rendering patte
 
 **One monorepo, three apps, twelve packages.** The organizer and admin dashboard, the public marketing and signup site, and a public API share twelve internal packages for the database schema, authentication, billing, email, monitoring, and UI. Apps never import from each other. The workspace layout is three globs in [`code/pnpm-workspace.yaml`](code/pnpm-workspace.yaml); the task graph is [`code/turbo.json`](code/turbo.json).
 
-**One design system.** Every screen in all three apps is composed from a single shadcn/ui component library in the shared [`ui` package](code/packages/ui/package.json): about seventy components on Radix primitives and Tailwind, copied into the repo so they can be changed freely. The [base Button](code/packages/ui/src/components/button.tsx), the composed [DataTable](code/packages/ui/src/components/data-table.tsx) that every list uses, and the [chart wrapper](code/packages/ui/src/components/chart.tsx) under every analytics card are in the code folder, along with a [product table](code/apps/dashboard/components/organizations/slug/players/players-data-table.tsx) built from them. We never designed a dropdown twice.
+**One design system.** Every screen in all three apps is composed from a single shadcn/ui component library in the shared [`ui` package](code/packages/ui/package.json): 76 components on Radix primitives and Tailwind, copied into the repo so they can be changed freely. The [base Button](code/packages/ui/src/components/button.tsx), the composed [DataTable](code/packages/ui/src/components/data-table.tsx) that every list uses, and the [chart wrapper](code/packages/ui/src/components/chart.tsx) under every analytics card are in the code folder, along with a [product table](code/apps/dashboard/components/organizations/slug/players/players-data-table.tsx) built from them. We never designed a dropdown twice.
 
 **Everything is scoped to an organization and an event year.** Every SportsFest row carries an `organizationId` and an `eventYearId`, and every query in the data layer and every server action filters by the caller's organization. The [schema excerpt](code/packages/database/src/schema.ts) shows the tenant core and the SportsFest tables that hang off it. Opening 2027 registration the week after the 2026 event meant inserting one event-year row.
 
-**Parallel route slots and server actions.** Dashboard pages are composed from 98 parallel route slots, each loading one card or table with its own loading and error state. Mutations are 159 server actions rather than an API layer; [`update-player.ts`](code/apps/dashboard/actions/players/update-player.ts) shows the full shape: Zod input, session and permission check, a transaction, cache revalidation.
+**Parallel route slots and server actions.** Dashboard pages are composed from 98 parallel route slots, each loading one card or table with its own loading and error state. Mutations are about 160 server actions rather than an API layer; [`update-player.ts`](code/apps/dashboard/actions/players/update-player.ts) shows the full shape: Zod input, session and permission check, a transaction, cache revalidation.
 
 ## Integrations
 
@@ -97,7 +97,7 @@ Each service below does a specific job in the product, and each links to the fil
 
 ![Purchase confirmation email](docs/screenshots/email-purchase-confirmation.png)
 
-**Auth.js with Microsoft Entra ID and Google.** Most organizers sign in with a corporate Microsoft account. The [provider configuration](code/packages/auth/src/providers.ts) wires both OAuth providers plus credentials, TOTP, and recovery codes, with rate limiting on sign-in attempts, over the [Drizzle adapter](code/packages/auth/src/adapter.ts) so auth tables share the schema and migrations with everything else.
+**Auth.js with Microsoft Entra ID and Google.** Organizers sign in with a corporate Microsoft account or a Google account. The [provider configuration](code/packages/auth/src/providers.ts) wires both OAuth providers plus credentials, TOTP, and recovery codes, with in-memory rate limiting on sign-in attempts, over the [Drizzle adapter](code/packages/auth/src/adapter.ts) so auth tables share the schema and migrations with everything else.
 
 **Supabase Postgres through Drizzle.** The schema is 51 tables, hand-written migrations, and typed queries from one package. Row-level security policies on the Supabase project ([`rls-policies.sql`](code/packages/database/rls-policies.sql)) are a second lock on the Supabase API surface; the app's own isolation is the organization scoping described above.
 
@@ -154,7 +154,7 @@ The 2026 season, the first on the platform.
 
 2027 registration opened April 27, 2026, the week after the 2026 event. Fourteen of the first eighteen companies to register were returning from 2026.
 
-Technical footprint: 51 database tables, about 130,000 lines of TypeScript, 98 parallel route slots, 159 server actions, 76 design system components, 16 email templates.
+Technical footprint: 51 database tables, about 130,000 lines of TypeScript, 98 parallel route slots, about 160 server actions, 76 design system components, 16 email templates.
 
 ![Shop](docs/screenshots/organizer-shop.png)
 

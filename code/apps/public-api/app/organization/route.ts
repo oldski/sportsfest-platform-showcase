@@ -1,5 +1,5 @@
 // Showcase note: a route from the third app, the public API. API-key authenticated, returns
-// the caller's organization. Shares the auth and database packages with the dashboard.
+// the caller's organization. Shares the api-keys and database packages with the dashboard.
 
 import { db, eq } from '@workspace/database/client';
 import { organizationTable } from '@workspace/database/schema';
