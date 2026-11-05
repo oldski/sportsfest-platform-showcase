@@ -1,0 +1,8 @@
+# Showcase note: the whole monorepo is three globs. apps/* are deployable Next.js apps,
+# packages/* are shared libraries, tooling/* are config presets. Everything imports by the
+# @workspace/* scope, so a package move never touches a consumer.
+
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "tooling/*"
