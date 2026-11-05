@@ -23,3 +23,17 @@ tree alone. It is not runnable: imports of files that were not copied are left a
 
 - `packages/database/src/schema.ts` — excerpt of the Drizzle schema: tenant core, event-year scope, and the SportsFest tables. The omitted definitions are listed in a comment at the top.
 - `packages/database/rls-policies.sql` — Supabase row-level security policies. They guard the Supabase API surface; the app's own queries are scoped in the data layer (see the note in the file).
+
+## Payments
+
+- `apps/dashboard/lib/stripe.ts` — the Stripe client, configured for card and ACH.
+- `apps/dashboard/app/api/stripe/create-payment-intent/route.ts` — leg one: validate the cart server-side, apply deposit and coupon math, create the PaymentIntent.
+- `apps/dashboard/app/api/stripe/confirm-payment/route.ts` — leg two: record the confirmed payment and advance the order status; ACH lands as processing.
+- `apps/dashboard/app/api/stripe/webhook/route.ts` — leg three: signature-verified, idempotent reconciliation of Stripe events into payments and orders, including delayed ACH settlement.
+- `apps/dashboard/components/organizations/slug/registration/sponsorship-payment-method-selector.tsx` — card versus bank transfer in the sponsorship payment UI.
+
+## Email
+
+- `packages/email/src/provider/` — the provider contract and its implementations (Resend in production; Nodemailer, SendGrid, Postmark, console).
+- `packages/email/src/templates/purchase-confirmation-email.tsx` — one React Email template with plain-data props.
+- `packages/email/src/send-purchase-confirmation-email.ts` — the sender: render, pick provider, send.
